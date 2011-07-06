@@ -163,7 +163,7 @@ module OAuth::RequestProxy
         oauth_params = OAuth::Helper.parse_header(header)
 
         # remove non-OAuth parameters
-        oauth_params.reject! { |k,v| k !~ /^oauth_/ }
+        # oauth_params.reject! { |k,v| k !~ /^oauth_/ }
 
         return oauth_params
       end

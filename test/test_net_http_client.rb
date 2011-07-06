@@ -206,7 +206,7 @@ class NetHTTPClientTest < Test::Unit::TestCase
 
   def test_step_by_step_token_request
     token_response = "oauth_token=requestkey&oauth_token_secret=requestsecret"
-    stub_request(:get, %r{http://term\.ie/oauth/example/request_token\.php(\?.*)?}).to_return(:body => token_response)
+    WebMock.stub_request(:get, %r{http://term\.ie/oauth/example/request_token\.php(\?.*)?}).to_return(:body => token_response)
 
     consumer=OAuth::Consumer.new(
         "key",

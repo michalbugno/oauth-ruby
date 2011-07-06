@@ -1,5 +1,6 @@
 require 'openssl'
 require 'base64'
+require 'addressable/uri'
 
 module OAuth
   module Helper
@@ -34,17 +35,12 @@ module OAuth
     #
     # See Also: {OAuth core spec version 1.0, section 9.1.1}[http://oauth.net/core/1.0#rfc.section.9.1.1]
     def normalize(params)
-      params.sort.map do |k, values|
+      uri = Addressable::URI.new
+      uri.query_values = params
+      query = uri.query
 
-        if values.is_a?(Array)
-          # multiple values were provided for a single key
-          values.sort.collect do |v|
-            [escape(k),escape(v)] * "="
-          end
-        else
-          [escape(k),escape(values)] * "="
-        end
-      end * "&"
+      # Addressable doesn't sort the params
+      query = query.split("&").sort { |a, b| a.split("=")[0] <=> b.split("=")[0] }.join("&")
     end
 
     # Parse an Authorization / WWW-Authenticate header into a hash. Takes care of unescaping and

@@ -37,6 +37,7 @@ PLATFORMS
 
 DEPENDENCIES
   actionpack (~> 2.3.8)
+  addressable
   curb (>= 0.6.6.0)
   em-http-request (= 0.2.11)
   jeweler
