@@ -41,6 +41,7 @@ module OAuth
 
       # Addressable doesn't sort the params
       query = query.split("&").sort { |a, b| a.split("=")[0] <=> b.split("=")[0] }.join("&")
+      query.gsub("[", "%5B").gsub("]", "%5D")
     end
 
     # Parse an Authorization / WWW-Authenticate header into a hash. Takes care of unescaping and
