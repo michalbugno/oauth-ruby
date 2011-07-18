@@ -91,6 +91,8 @@ module OAuth::RequestProxy
     def normalized_uri
       scheme = request.https? ? "https" : "http"
       u = URI.parse(uri)
+      Rails.logger.info("https? #{request.https?}")
+      Rails.logger.info("uri: #{u.inspect}")
       "#{scheme}://#{u.host.downcase}#{(scheme == 'http' && u.port != 80) || (scheme == 'https' && u.port != 443) ? ":#{u.port}" : ""}#{(u.path && u.path != '') ? u.path : '/'}"
     end
 
