@@ -7,7 +7,6 @@ module OAuth::Signature::RSA
     hash_class ::Digest::SHA1
 
     def ==(cmp_signature)
-      Rails.logger.info("Comparing signature. Base string: '#{signature_base_string}'")
       public_key.verify(OpenSSL::Digest::SHA1.new, Base64.decode64(cmp_signature.is_a?(Array) ? cmp_signature.first : cmp_signature), signature_base_string)
     end
 

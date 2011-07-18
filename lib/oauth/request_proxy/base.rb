@@ -89,11 +89,15 @@ module OAuth::RequestProxy
 
     # See 9.1.2 in specs
     def normalized_uri
-      scheme = request.https? ? "https" : "http"
+      scheme = request.env['HTTP_X_FORWARDED_PROTO']
       u = URI.parse(uri)
-      Rails.logger.info("https? #{request.https?}")
-      Rails.logger.info("uri: #{u.inspect}")
-      "#{scheme}://#{u.host.downcase}#{(scheme == 'http' && u.port != 80) || (scheme == 'https' && u.port != 443) ? ":#{u.port}" : ""}#{(u.path && u.path != '') ? u.path : '/'}"
+      port = nil
+      if scheme && scheme == "https"
+        port = 443
+      end
+      port ||= u.port
+      scheme ||= u.scheme
+      "#{scheme}://#{u.host.downcase}#{(scheme == 'http' && port != 80) || (scheme == 'https' && port != 443) ? ":#{port}" : ""}#{(u.path && u.path != '') ? u.path : '/'}"
     end
 
     # See 9.1.1. in specs Normalize Request Parameters

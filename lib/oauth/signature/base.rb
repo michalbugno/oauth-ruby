@@ -74,7 +74,6 @@ module OAuth::Signature
     end
 
     def signature_base_string
-      Rails.logger.info("Request for which base string is computed: #{request.inspect}")
       request.signature_base_string
     end
 
