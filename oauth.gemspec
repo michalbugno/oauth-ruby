@@ -146,5 +146,6 @@ Gem::Specification.new do |s|
     s.add_dependency(%q<em-http-request>, [">= 0.2.10"])
     s.add_dependency(%q<curb>, [">= 0.6.6.0"])
   end
+  s.add_dependency(%q<addressable>, [">= 0"])
 end
 
