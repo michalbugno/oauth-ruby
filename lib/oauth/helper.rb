@@ -36,12 +36,28 @@ module OAuth
     # See Also: {OAuth core spec version 1.0, section 9.1.1}[http://oauth.net/core/1.0#rfc.section.9.1.1]
     def normalize(params)
       uri = Addressable::URI.new
-      uri.query_values = params
+      uri.query_values = flatten_params(params)
       query = uri.query
 
       # Addressable doesn't sort the params
       query = query.split("&").sort { |a, b| a.split("=")[0] <=> b.split("=")[0] }.join("&")
       query.gsub("[", "%5B").gsub("]", "%5D")
+    end
+
+    # Flattens nested attributes. Required until Adressable adds support for it.
+    def flatten_params(hash, keys=nil)
+      new_hash = {}
+      hash.map do |k, v|
+        string_key = k.to_s
+        new_keys = keys ? "#{keys}[#{string_key}]" : string_key
+        if v.is_a?(Hash)
+          sub_hash = flatten_params v, new_keys
+          new_hash.merge! sub_hash
+        else
+          new_hash[new_keys] = v
+        end
+      end
+      new_hash
     end
 
     # Parse an Authorization / WWW-Authenticate header into a hash. Takes care of unescaping and
