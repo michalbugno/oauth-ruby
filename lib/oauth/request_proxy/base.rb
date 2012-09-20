@@ -89,7 +89,11 @@ module OAuth::RequestProxy
 
     # See 9.1.2 in specs
     def normalized_uri
-      scheme = request.env['HTTP_X_FORWARDED_PROTO']
+      scheme = if request.respond_to?(:env)
+                 request.env['HTTP_X_FORWARDED_PROTO']
+               else
+                 request['HTTP_X_FORWARDED_PROTO']
+               end
       u = URI.parse(uri)
       port = nil
       if scheme && scheme == "https"
